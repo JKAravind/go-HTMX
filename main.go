@@ -21,24 +21,41 @@ func newTemplate() *Templates {
 	}
 }
 
-type Count struct {
-	Count int
+type UserCredential struct {
+	Name string
+	Mail string
+}
+
+type UserCredentials = []UserCredential
+
+type Data struct {
+	UserCredentials UserCredentials
+}
+
+func addData() Data {
+	return Data{
+		UserCredentials: []UserCredential{
+			addCredential("JohnDoe", "jd@gmail.com"),
+			addCredential("JaneDoe", "ja@gmail.com"),
+		},
+	}
+}
+
+func addCredential(name string, mail string) UserCredential {
+	return UserCredential{
+		Name: name,
+		Mail: mail,
+	}
 }
 
 func main() {
 	e := echo.New()
 	e.Renderer = newTemplate()
-
-	count := Count{Count: 0}
+	data := addData()
 
 	e.GET("/", func(c echo.Context) error {
-		count.Count++
-		return c.Render(200, "index", count)
-	})
 
-	e.POST("/count", func(c echo.Context) error {
-		count.Count++
-		return c.Render(200, "count", count)
+		return c.Render(200, "index", data)
 	})
 
 	e.Start(":8084")
