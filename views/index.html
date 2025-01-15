@@ -19,15 +19,18 @@
 {{end}}
 
         {{block "form" .}}
-            <input type="text" name="Username" placeholder="username" >
+        <form hx-post="/credentials" hx-target="body">
+            <input type="text" name="username" placeholder="username" >
             <input type="text" name="mail" placeholder="mail">
-            <button>Submit</button>
+            <button >Submit</button>
 
+        </form>
+           
         {{end}}
 
         {{block "display" .}}
         {{ range .UserCredentials}}
-                <div>
+                <div id="display">
                     Username : {{.Name}}
                     Mail : {{.Mail}}
                 </div>

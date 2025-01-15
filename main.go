@@ -3,6 +3,7 @@ package main
 import (
 	"html/template"
 	"io"
+	"log"
 
 	"github.com/labstack/echo/v4"
 )
@@ -32,8 +33,8 @@ type Data struct {
 	UserCredentials UserCredentials
 }
 
-func addData() Data {
-	return Data{
+func addData() *Data {
+	return &Data{
 		UserCredentials: []UserCredential{
 			addCredential("JohnDoe", "jd@gmail.com"),
 			addCredential("JaneDoe", "ja@gmail.com"),
@@ -56,6 +57,15 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 
 		return c.Render(200, "index", data)
+	})
+
+	e.POST("/credentials", func(c echo.Context) error {
+		username := c.FormValue("username")
+		mail := c.FormValue("mail")
+		data.UserCredentials = append(data.UserCredentials, addCredential(username, mail))
+		log.Println(username)
+		return c.Render(200, "index", data)
+
 	})
 
 	e.Start(":8084")
