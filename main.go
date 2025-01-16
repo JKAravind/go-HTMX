@@ -62,9 +62,10 @@ func main() {
 	e.POST("/credentials", func(c echo.Context) error {
 		username := c.FormValue("username")
 		mail := c.FormValue("mail")
-		data.UserCredentials = append(data.UserCredentials, addCredential(username, mail))
+		contact := addCredential(username, mail)
+		data.UserCredentials = append(data.UserCredentials, contact)
 		log.Println(username)
-		return c.Render(200, "index", data)
+		return c.Render(200, "contact", contact)
 
 	})
 
